@@ -26,6 +26,15 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 100
 
+[tool.coverage.run]
+source = ["app"]
+omit = ["*/__pycache__/*", "tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = ["pragma: no cover", "if __name__ == .__main__.:", "raise NotImplementedError", "pass"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
