@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: (title)
+  version: 0.0.0
+tags: []
+paths:
+  /api/v1/health:
+    get:
+      operationId: health
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    required:
+                      - type
+                      - data
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - success
+                      data:
+                        $ref: '#/components/schemas/HealthResponse'
+                  - $ref: '#/components/schemas/Failure'
+components:
+  schemas:
+    Failure:
+      type: object
+      required:
+        - type
+        - error
+        - code
+      properties:
+        type:
+          type: string
+          enum:
+            - failure
+        error:
+          type: string
+        code:
+          type: string
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - version
+        - database
+        - uptime
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+            - degraded
+        version:
+          type: string
+        database:
+          type: string
+          enum:
+            - connected
+            - disconnected
+        uptime:
+          type: number
+          format: double
