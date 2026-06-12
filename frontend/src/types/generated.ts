@@ -11,3 +11,16 @@ export interface HealthResponse {
 export type Result<T> =
   | { type: "success"; data: T }
   | { type: "failure"; error: string; code: string };
+
+export interface MeetingType {
+  id: string;
+  name: string;
+  description: string;
+  duration_minutes: number;
+}
+
+export interface CreateMeetingTypeRequest {
+  name: string;
+  description: string;
+  duration_minutes: number;
+}
