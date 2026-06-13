@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { Toaster } from "vue-sonner";
 import HealthIndicator from "@/components/HealthIndicator.vue";
 </script>
 
@@ -14,6 +13,11 @@ import HealthIndicator from "@/components/HealthIndicator.vue";
           >CalCom</RouterLink
         >
         <RouterLink
+          to="/booking"
+          class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+          >Забронировать</RouterLink
+        >
+        <RouterLink
           to="/admin"
           class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
           >Админка</RouterLink
@@ -22,6 +26,5 @@ import HealthIndicator from "@/components/HealthIndicator.vue";
       <HealthIndicator />
     </header>
     <router-view />
-    <Toaster richColors />
   </div>
 </template>

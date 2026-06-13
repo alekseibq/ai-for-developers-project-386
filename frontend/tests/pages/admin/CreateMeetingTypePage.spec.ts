@@ -4,17 +4,21 @@ import { createPinia } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 import CreateMeetingTypePage from "@/pages/admin/CreateMeetingTypePage.vue";
 
+const toastMock = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 vi.mock("@/api/meetingTypes", () => ({
   getMeetingTypes: vi.fn(),
   createMeetingType: vi.fn(),
 }));
 
-vi.mock("vue-sonner", () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+vi.mock("vue-toastification", () => ({
+  useToast: () => toastMock,
 }));
 
 import { createMeetingType } from "@/api/meetingTypes";
-import { toast } from "vue-sonner";
 import type { Mock } from "vitest";
 
 const router = createRouter({
@@ -113,7 +117,7 @@ describe("CreateMeetingTypePage", () => {
       description: "Desc",
       duration_minutes: 30,
     });
-    expect(toast.success).toHaveBeenCalledWith("Тип события успешно создан");
+    expect(toastMock.success).toHaveBeenCalledWith("Тип события успешно создан");
     expect(push).toHaveBeenCalledWith("/admin/meeting_types");
   });
 
@@ -129,8 +133,8 @@ describe("CreateMeetingTypePage", () => {
     await wrapper.find("form").trigger("submit");
     await new Promise(process.nextTick);
 
-    expect(toast.error).toHaveBeenCalledWith("Название не может быть пустым", {
-      duration: 8000,
+    expect(toastMock.error).toHaveBeenCalledWith("Название не может быть пустым", {
+      timeout: 8000,
     });
   });
 
@@ -142,8 +146,8 @@ describe("CreateMeetingTypePage", () => {
     await wrapper.find("form").trigger("submit");
     await new Promise(process.nextTick);
 
-    expect(toast.error).toHaveBeenCalledWith("Сервер недоступен. Попробуйте позже.", {
-      duration: 8000,
+    expect(toastMock.error).toHaveBeenCalledWith("Сервер недоступен. Попробуйте позже.", {
+      timeout: 8000,
     });
   });
 
@@ -159,8 +163,8 @@ describe("CreateMeetingTypePage", () => {
     await wrapper.find("form").trigger("submit");
     await new Promise(process.nextTick);
 
-    expect(toast.error).toHaveBeenCalledWith("Something went wrong", {
-      duration: 8000,
+    expect(toastMock.error).toHaveBeenCalledWith("Something went wrong", {
+      timeout: 8000,
     });
   });
 });

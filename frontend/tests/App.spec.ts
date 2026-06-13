@@ -10,6 +10,14 @@ const router = createRouter({
   routes: [
     { path: "/", name: "home", component: { template: "<div>Home</div>" } },
     {
+      path: "/booking",
+      component: { template: "<div>Booking</div>" },
+    },
+    {
+      path: "/booking/:meetingTypeId",
+      component: { template: "<div>Slot</div>" },
+    },
+    {
       path: "/admin",
       component: { template: "<div>Admin</div>" },
       children: [
@@ -76,5 +84,15 @@ describe("App", () => {
     });
 
     expect(wrapper.text()).toContain("Админка");
+  });
+
+  it("renders Забронировать link in header", () => {
+    const wrapper = mount(App, {
+      global: {
+        plugins: [router, createPinia()],
+      },
+    });
+
+    expect(wrapper.text()).toContain("Забронировать");
   });
 });
