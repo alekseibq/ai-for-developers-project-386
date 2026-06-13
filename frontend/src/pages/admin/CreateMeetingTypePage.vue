@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { toast } from "vue-sonner";
+import { useToast } from "vue-toastification";
 import { useMeetingTypesStore } from "@/stores/meetingTypes";
 
 const router = useRouter();
 const store = useMeetingTypesStore();
+const toast = useToast();
 
 const name = ref("");
 const description = ref("");
@@ -52,7 +53,7 @@ async function submit() {
     };
     const userMessage = messages[result.code] || result.error || "Произошла ошибка";
     toast.error(userMessage, {
-      duration: 8000,
+      timeout: 8000,
     });
   }
 }

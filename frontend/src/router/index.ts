@@ -8,6 +8,16 @@ const routes = [
     component: HomePage,
   },
   {
+    path: "/booking",
+    name: "booking",
+    component: () => import("@/pages/booking/BookingMeetingTypesPage.vue"),
+  },
+  {
+    path: "/booking/:meetingTypeId",
+    name: "booking-slots",
+    component: () => import("@/pages/booking/BookingSlotPage.vue"),
+  },
+  {
     path: "/admin",
     component: () => import("@/pages/admin/AdminLayout.vue"),
     children: [
