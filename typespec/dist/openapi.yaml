@@ -4,6 +4,70 @@ info:
   version: 0.0.0
 tags: []
 paths:
+  /api/v1/bookings:
+    post:
+      operationId: createBooking
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    required:
+                      - type
+                      - data
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - success
+                      data:
+                        $ref: '#/components/schemas/BookingRichDto'
+                  - $ref: '#/components/schemas/Failure'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  $ref: '#/components/schemas/CreateBookingRequest'
+              required:
+                - body
+    get:
+      operationId: listBookings
+      parameters:
+        - name: upcoming
+          in: query
+          required: true
+          schema:
+            type: boolean
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    required:
+                      - type
+                      - data
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - success
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BookingRichDto'
+                  - $ref: '#/components/schemas/Failure'
   /api/v1/health:
     get:
       operationId: health
@@ -27,8 +91,177 @@ paths:
                       data:
                         $ref: '#/components/schemas/HealthResponse'
                   - $ref: '#/components/schemas/Failure'
+  /api/v1/meeting-types:
+    get:
+      operationId: listMeetingTypes
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    required:
+                      - type
+                      - data
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - success
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MeetingTypeDto'
+                  - $ref: '#/components/schemas/Failure'
+    post:
+      operationId: createMeetingType
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    required:
+                      - type
+                      - data
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - success
+                      data:
+                        $ref: '#/components/schemas/MeetingTypeDto'
+                  - $ref: '#/components/schemas/Failure'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  $ref: '#/components/schemas/CreateMeetingTypeRequest'
+              required:
+                - body
+  /api/v1/slots:
+    get:
+      operationId: getSlots
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
+        - name: meeting_type_id
+          in: query
+          required: true
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    required:
+                      - type
+                      - data
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - success
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SlotDto'
+                  - $ref: '#/components/schemas/Failure'
 components:
   schemas:
+    BookingRawDto:
+      type: object
+      required:
+        - id
+        - meeting_type_id
+        - guest_name
+        - start_time
+        - created_at
+      properties:
+        id:
+          type: string
+        meeting_type_id:
+          type: string
+        guest_name:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+    BookingRichDto:
+      type: object
+      required:
+        - id
+        - guest_name
+        - start_time
+        - end_time
+        - created_at
+        - meeting_type
+      properties:
+        id:
+          type: string
+        guest_name:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        meeting_type:
+          $ref: '#/components/schemas/MeetingTypeDto'
+    CreateBookingRequest:
+      type: object
+      required:
+        - meeting_type_id
+        - guest_name
+        - start_time
+      properties:
+        meeting_type_id:
+          type: string
+        guest_name:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+    CreateMeetingTypeRequest:
+      type: object
+      required:
+        - name
+        - description
+        - duration_minutes
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        duration_minutes:
+          type: integer
+          format: int32
     Failure:
       type: object
       required:
@@ -67,3 +300,32 @@ components:
         uptime:
           type: number
           format: double
+    MeetingTypeDto:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - duration_minutes
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        duration_minutes:
+          type: integer
+          format: int32
+    SlotDto:
+      type: object
+      required:
+        - start_time
+        - end_time
+      properties:
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time

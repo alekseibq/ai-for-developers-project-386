@@ -1,8 +1,8 @@
-import time
 import os
+import time
 
-from app.domain.result import Success, Failure
 from app.domain.objects import HealthObj
+from app.domain.result import Failure, Success
 from app.repositories.health import HealthRepository
 
 _start_time = time.time()

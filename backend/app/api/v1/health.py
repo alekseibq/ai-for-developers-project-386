@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 
-from app.domain.result import Success, Failure
 from app.domain.dto import HealthDto
-from app.usecases.health import HealthUseCase
+from app.domain.result import Failure, Success
 from app.infrastructure.di import health_usecase
+from app.usecases.health import HealthUseCase
 
 router = APIRouter(tags=["health"])
 

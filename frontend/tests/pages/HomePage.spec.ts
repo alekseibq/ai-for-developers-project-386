@@ -1,0 +1,15 @@
+import { describe, it, expect } from "vitest";
+import { mount } from "@vue/test-utils";
+import HomePage from "@/pages/HomePage.vue";
+
+describe("HomePage", () => {
+  it("renders the title", () => {
+    const wrapper = mount(HomePage);
+    expect(wrapper.text()).toContain("CalCom");
+  });
+
+  it("renders 'Coming soon' text", () => {
+    const wrapper = mount(HomePage);
+    expect(wrapper.text()).toContain("Coming soon");
+  });
+});
