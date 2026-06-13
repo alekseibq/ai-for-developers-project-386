@@ -44,7 +44,7 @@ async function submit() {
 
   if (result.type === "success") {
     toast.success("Тип события успешно создан");
-    router.push("/admin/meeting_types");
+    void router.push("/admin/meeting_types");
   } else {
     const messages: Record<string, string> = {
       INVALID_NAME: "Название не может быть пустым",
@@ -59,56 +59,53 @@ async function submit() {
 }
 
 function cancel() {
-  router.push("/admin/meeting_types");
+  void router.push("/admin/meeting_types");
 }
 </script>
 
 <template>
   <div>
-    <h2 class="text-2xl font-bold mb-6">Создать новый Тип события</h2>
+    <h2 class="mb-6 text-2xl font-bold">Создать новый Тип события</h2>
 
-    <form
-      class="max-w-lg space-y-5"
-      @submit.prevent="submit"
-    >
+    <form class="max-w-lg space-y-5" @submit.prevent="submit">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Название</label>
+        <label class="mb-1 block text-sm font-medium text-gray-700">Название</label>
         <input
           v-model="name"
           type="text"
-          class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          class="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           :class="fieldErrors.name ? 'border-red-400' : 'border-gray-300'"
         />
-        <p v-if="fieldErrors.name" class="text-red-500 text-xs mt-1">
+        <p v-if="fieldErrors.name" class="mt-1 text-xs text-red-500">
           {{ fieldErrors.name }}
         </p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Описание</label>
+        <label class="mb-1 block text-sm font-medium text-gray-700">Описание</label>
         <textarea
           v-model="description"
-          class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          class="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           :class="fieldErrors.description ? 'border-red-400' : 'border-gray-300'"
           rows="3"
         />
-        <p v-if="fieldErrors.description" class="text-red-500 text-xs mt-1">
+        <p v-if="fieldErrors.description" class="mt-1 text-xs text-red-500">
           {{ fieldErrors.description }}
         </p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
+        <label class="mb-1 block text-sm font-medium text-gray-700">
           Длительность (в минутах)
         </label>
         <input
           v-model.number="durationMinutes"
           type="number"
           min="1"
-          class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          class="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           :class="fieldErrors.duration_minutes ? 'border-red-400' : 'border-gray-300'"
         />
-        <p v-if="fieldErrors.duration_minutes" class="text-red-500 text-xs mt-1">
+        <p v-if="fieldErrors.duration_minutes" class="mt-1 text-xs text-red-500">
           {{ fieldErrors.duration_minutes }}
         </p>
       </div>
@@ -116,7 +113,7 @@ function cancel() {
       <div class="flex gap-3 pt-2">
         <button
           type="button"
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+          class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
           @click="cancel"
         >
           Отменить
@@ -124,7 +121,7 @@ function cancel() {
         <button
           type="submit"
           :disabled="submitting"
-          class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {{ submitting ? "Создание..." : "Создать" }}
         </button>

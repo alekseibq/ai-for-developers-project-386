@@ -14,8 +14,8 @@ const toast = useToast();
 
 const meetingTypeId = route.params.meetingTypeId as string;
 
-const meetingType = computed(() =>
-  store.meetingTypes.find((mt) => mt.id === meetingTypeId) ?? null
+const meetingType = computed(
+  () => store.meetingTypes.find((mt) => mt.id === meetingTypeId) ?? null,
 );
 
 // Today and max booking date
@@ -53,8 +53,18 @@ const dayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
 const viewMonthName = computed(() => {
   const names = [
-    "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
   ];
   return names[viewMonth.value];
 });
@@ -95,12 +105,10 @@ function isDateAvailable(date: Date): boolean {
 }
 
 function canGoPrev(): boolean {
-  return viewYear.value > today.getFullYear() ||
-    (viewYear.value === today.getFullYear() && viewMonth.value > today.getMonth());
-}
-
-function canGoNext(): boolean {
-  return true;
+  return (
+    viewYear.value > today.getFullYear() ||
+    (viewYear.value === today.getFullYear() && viewMonth.value > today.getMonth())
+  );
 }
 
 function prevMonth() {
@@ -139,8 +147,18 @@ function formatDateKey(date: Date): string {
 function formatDateDisplay(dateStr: string): string {
   const date = new Date(dateStr + "T00:00:00");
   const names = [
-    "января", "февраля", "марта", "апреля", "мая", "июня",
-    "июля", "августа", "сентября", "октября", "ноября", "декабря",
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
   ];
   return `${date.getDate()} ${names[date.getMonth()]} ${date.getFullYear()}`;
 }
@@ -233,96 +251,113 @@ function resetFlow() {
 </script>
 
 <template>
-  <div class="max-w-2xl mx-auto px-4 py-8">
+  <div class="mx-auto max-w-2xl px-4 py-8">
     <button
-      class="text-sm text-gray-500 hover:text-gray-700 mb-4 flex items-center gap-1"
+      class="mb-4 flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
       @click="router.push('/booking')"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="size-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       Назад к типам событий
     </button>
 
-    <div v-if="!meetingType && store.loading" class="text-gray-500">
-      Загрузка...
-    </div>
+    <div v-if="!meetingType && store.loading" class="text-gray-500">Загрузка...</div>
 
-    <div v-else-if="!meetingType" class="text-red-600 bg-red-50 border border-red-200 rounded-md p-3 text-sm">
+    <div
+      v-else-if="!meetingType"
+      class="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600"
+    >
       Тип события не найден
     </div>
 
     <template v-else>
       <div class="mb-6">
         <h2 class="text-2xl font-bold">{{ meetingType.name }}</h2>
-        <p class="text-sm text-gray-600 mt-1">{{ meetingType.description }}</p>
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 mt-2">
+        <p class="mt-1 text-sm text-gray-600">{{ meetingType.description }}</p>
+        <span
+          class="mt-2 inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
+        >
           {{ meetingType.duration_minutes }} мин
         </span>
       </div>
 
-      <div v-if="bookingResult" class="border border-green-200 bg-green-50 rounded-lg p-6 mb-6">
-        <h3 class="text-lg font-semibold text-green-800 mb-2">
-          Вы записаны!
-        </h3>
-        <div class="text-sm text-green-700 space-y-1">
+      <div v-if="bookingResult" class="mb-6 rounded-lg border border-green-200 bg-green-50 p-6">
+        <h3 class="mb-2 text-lg font-semibold text-green-800">Вы записаны!</h3>
+        <div class="space-y-1 text-sm text-green-700">
           <p><span class="font-medium">Имя:</span> {{ bookingResult.guest_name }}</p>
-          <p><span class="font-medium">Дата:</span> {{ formatDateDisplay(bookingResult.start_time.split("T")[0]) }}</p>
-          <p><span class="font-medium">Время:</span> {{ formatTime(bookingResult.start_time) }} – {{ formatTime(bookingResult.end_time) }}</p>
+          <p>
+            <span class="font-medium">Дата:</span>
+            {{ formatDateDisplay(bookingResult.start_time.split("T")[0]) }}
+          </p>
+          <p>
+            <span class="font-medium">Время:</span> {{ formatTime(bookingResult.start_time) }} –
+            {{ formatTime(bookingResult.end_time) }}
+          </p>
           <p><span class="font-medium">Тип:</span> {{ bookingResult.meeting_type.name }}</p>
         </div>
         <button
-          class="mt-4 px-4 py-2 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-md hover:bg-indigo-200 transition-colors"
+          class="mt-4 rounded-md bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-200"
           @click="resetFlow"
         >
           Записаться на другое время
         </button>
       </div>
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div v-else class="grid grid-cols-1 gap-8 md:grid-cols-2">
         <div>
-          <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">
             Выберите дату
           </h3>
 
-          <div class="border border-gray-200 rounded-lg bg-white p-4">
-            <div class="flex items-center justify-between mb-4">
+          <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <div class="mb-4 flex items-center justify-between">
               <button
-                class="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                class="p-1 text-gray-400 hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-30"
                 :disabled="!canGoPrev()"
                 @click="prevMonth"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
               <span class="text-sm font-semibold">{{ viewMonthName }} {{ viewYear }}</span>
-              <button
-                class="p-1 text-gray-400 hover:text-gray-600"
-                @click="nextMonth"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <button class="p-1 text-gray-400 hover:text-gray-600" @click="nextMonth">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
 
             <div class="grid grid-cols-7 gap-0 text-center">
-              <div
-                v-for="dn in dayNames"
-                :key="dn"
-                class="text-xs font-medium text-gray-400 py-1"
-              >
+              <div v-for="dn in dayNames" :key="dn" class="py-1 text-xs font-medium text-gray-400">
                 {{ dn }}
               </div>
-              <div
-                v-for="(cd, idx) in calendarDays"
-                :key="idx"
-                class="py-1"
-              >
+              <div v-for="(cd, idx) in calendarDays" :key="idx" class="py-1">
                 <button
                   v-if="cd.available"
-                  class="w-9 h-9 rounded-full text-sm font-medium transition-colors"
+                  class="size-9 rounded-full text-sm font-medium transition-colors"
                   :class="
                     selectedDate === formatDateKey(cd.date)
                       ? 'bg-indigo-600 text-white'
@@ -332,10 +367,7 @@ function resetFlow() {
                 >
                   {{ cd.day }}
                 </button>
-                <span
-                  v-else
-                  class="inline-block w-9 h-9 leading-9 text-sm text-gray-300"
-                >
+                <span v-else class="inline-block size-9 text-sm leading-9 text-gray-300">
                   {{ cd.day }}
                 </span>
               </div>
@@ -344,49 +376,58 @@ function resetFlow() {
         </div>
 
         <div>
-          <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">
             Доступное время
           </h3>
 
-          <div v-if="!selectedDate" class="text-sm text-gray-400 border border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <div
+            v-if="!selectedDate"
+            class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-400"
+          >
             Выберите дату в календаре
           </div>
 
-          <div v-else-if="slotsLoading" class="text-sm text-gray-500">
-            Загрузка слотов...
-          </div>
+          <div v-else-if="slotsLoading" class="text-sm text-gray-500">Загрузка слотов...</div>
 
-          <div v-else-if="slotsError" class="text-red-600 bg-red-50 border border-red-200 rounded-md p-3 text-sm">
+          <div
+            v-else-if="slotsError"
+            class="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600"
+          >
             {{ slotsError }}
           </div>
 
-          <div v-else-if="slots.length === 0" class="text-sm text-gray-400 border border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <div
+            v-else-if="slots.length === 0"
+            class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-400"
+          >
             Нет доступных слотов на {{ formatDateDisplay(selectedDate) }}
           </div>
 
           <div v-else>
-            <p class="text-sm text-gray-500 mb-3">
-              Доступные слоты на <span class="font-medium">{{ formatDateDisplay(selectedDate) }}</span>
+            <p class="mb-3 text-sm text-gray-500">
+              Доступные слоты на
+              <span class="font-medium">{{ formatDateDisplay(selectedDate) }}</span>
             </p>
 
             <div v-if="!selectedSlot" class="space-y-2">
               <button
                 v-for="(slot, idx) in slots"
                 :key="idx"
-                class="w-full text-left px-4 py-3 border border-gray-200 rounded-lg text-sm font-medium hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+                class="w-full rounded-lg border border-gray-200 px-4 py-3 text-left text-sm font-medium transition-colors hover:border-indigo-300 hover:bg-indigo-50"
                 @click="selectSlot(slot)"
               >
                 {{ formatTime(slot.start_time) }} – {{ formatTime(slot.end_time) }}
               </button>
             </div>
 
-            <div v-else class="border border-indigo-200 bg-indigo-50 rounded-lg p-4">
-              <div class="flex items-center justify-between mb-3">
+            <div v-else class="rounded-lg border border-indigo-200 bg-indigo-50 p-4">
+              <div class="mb-3 flex items-center justify-between">
                 <span class="text-sm font-semibold text-indigo-800">
-                  {{ formatTime(selectedSlot.start_time) }} – {{ formatTime(selectedSlot.end_time) }}
+                  {{ formatTime(selectedSlot.start_time) }} –
+                  {{ formatTime(selectedSlot.end_time) }}
                 </span>
                 <button
-                  class="text-xs text-gray-500 hover:text-gray-700 underline"
+                  class="text-xs text-gray-500 underline hover:text-gray-700"
                   @click="cancelSlotSelection"
                 >
                   Отменить
@@ -395,20 +436,20 @@ function resetFlow() {
 
               <form @submit.prevent="submitBooking">
                 <div class="mb-3">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Ваше имя</label>
+                  <label class="mb-1 block text-sm font-medium text-gray-700">Ваше имя</label>
                   <input
                     v-model="guestName"
                     type="text"
-                    class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     :class="nameError ? 'border-red-400' : 'border-gray-300'"
                     placeholder="Введите имя"
                   />
-                  <p v-if="nameError" class="text-red-500 text-xs mt-1">{{ nameError }}</p>
+                  <p v-if="nameError" class="mt-1 text-xs text-red-500">{{ nameError }}</p>
                 </div>
                 <button
                   type="submit"
                   :disabled="submitting"
-                  class="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {{ submitting ? "Запись..." : "Записаться" }}
                 </button>

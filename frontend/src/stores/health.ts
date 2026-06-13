@@ -29,7 +29,7 @@ export const useHealthStore = defineStore("health", () => {
   }
 
   function startPolling(ms = 5000) {
-    fetchHealth();
+    void fetchHealth();
     intervalId = setInterval(fetchHealth, ms);
   }
 

@@ -25,6 +25,8 @@ coverage:
 
 lint:
 	cd backend && $(POETRY) run ruff check .
+	cd backend && $(POETRY) run mypy app/
+	cd backend && $(POETRY) run bandit -r app/ -c .bandit
 	cd frontend && npm run lint
 
 e2e:

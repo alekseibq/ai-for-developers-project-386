@@ -1,7 +1,5 @@
 from unittest.mock import AsyncMock
 
-import pytest
-
 from app.domain.result import Failure
 from app.infrastructure.di import list_all_meeting_type_usecase
 from app.main import app
@@ -33,16 +31,22 @@ class TestGetMeetingTypes:
             app.dependency_overrides.clear()
 
     async def test_returns_created_types(self, test_client):
-        await test_client.post("/api/v1/meeting-types", json={
-            "name": "Consultation",
-            "description": "30 min meeting",
-            "duration_minutes": 30,
-        })
-        await test_client.post("/api/v1/meeting-types", json={
-            "name": "Workshop",
-            "description": "60 min workshop",
-            "duration_minutes": 60,
-        })
+        await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "Consultation",
+                "description": "30 min meeting",
+                "duration_minutes": 30,
+            },
+        )
+        await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "Workshop",
+                "description": "60 min workshop",
+                "duration_minutes": 60,
+            },
+        )
 
         response = await test_client.get("/api/v1/meeting-types")
 
@@ -57,11 +61,14 @@ class TestGetMeetingTypes:
 
 class TestCreateMeetingType:
     async def test_success(self, test_client):
-        response = await test_client.post("/api/v1/meeting-types", json={
-            "name": "Consultation",
-            "description": "30 min meeting",
-            "duration_minutes": 30,
-        })
+        response = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "Consultation",
+                "description": "30 min meeting",
+                "duration_minutes": 30,
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()
@@ -71,11 +78,14 @@ class TestCreateMeetingType:
         assert "id" in body["data"]
 
     async def test_empty_name_fails(self, test_client):
-        response = await test_client.post("/api/v1/meeting-types", json={
-            "name": "",
-            "description": "desc",
-            "duration_minutes": 30,
-        })
+        response = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "",
+                "description": "desc",
+                "duration_minutes": 30,
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()
@@ -83,11 +93,14 @@ class TestCreateMeetingType:
         assert body["code"] == "INVALID_NAME"
 
     async def test_zero_duration_fails(self, test_client):
-        response = await test_client.post("/api/v1/meeting-types", json={
-            "name": "Test",
-            "description": "desc",
-            "duration_minutes": 0,
-        })
+        response = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "Test",
+                "description": "desc",
+                "duration_minutes": 0,
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()

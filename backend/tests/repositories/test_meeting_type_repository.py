@@ -1,7 +1,5 @@
 from bson import ObjectId
 
-import pytest
-
 from app.domain.objects import MeetingTypeObj
 
 
@@ -24,7 +22,9 @@ class TestCreate:
 class TestFindById:
     async def test_found(self, meeting_type_repo):
         created = await meeting_type_repo.create(
-            name="Workshop", description="60 min", duration_minutes=60,
+            name="Workshop",
+            description="60 min",
+            duration_minutes=60,
         )
 
         found = await meeting_type_repo.find_by_id(created.id)

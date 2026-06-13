@@ -2,17 +2,17 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends
 
-from app.api.v1.dto import CreateBookingRequest
-from app.domain.result import Success, Failure
-from app.usecases.create_booking_use_case import CreateBookingUseCase
-from app.usecases.list_upcoming_bookings_use_case import ListUpcomingBookingsUseCase
+from app.api.v1.dto import BookingRichDto, CreateBookingRequest
 from app.api.v1.mappers import booking_obj_to_rich_dto
-from app.repositories.meeting_type_repository import MeetingTypeRepository
+from app.domain.result import Failure, Success
 from app.infrastructure.di import (
     create_booking_usecase,
     list_upcoming_bookings_usecase,
     meeting_type_repository,
 )
+from app.repositories.meeting_type_repository import MeetingTypeRepository
+from app.usecases.create_booking_use_case import CreateBookingUseCase
+from app.usecases.list_upcoming_bookings_use_case import ListUpcomingBookingsUseCase
 
 router = APIRouter(tags=["bookings"])
 
@@ -22,7 +22,7 @@ async def create_booking(
     body: CreateBookingRequest,
     use_case: CreateBookingUseCase = Depends(create_booking_usecase),
     meeting_type_repo: MeetingTypeRepository = Depends(meeting_type_repository),
-):
+) -> Success[BookingRichDto] | Failure:
     result = await use_case(
         meeting_type_id=body.meeting_type_id,
         guest_name=body.guest_name,
@@ -44,13 +44,13 @@ async def create_booking(
 async def list_bookings(
     use_case: ListUpcomingBookingsUseCase = Depends(list_upcoming_bookings_usecase),
     meeting_type_repo: MeetingTypeRepository = Depends(meeting_type_repository),
-):
+) -> Success[list[BookingRichDto]] | Failure:
     result = await use_case()
     if result.type == "failure":
         return result
 
     bookings = result.data
-    type_ids = list(set(b.meeting_type_id for b in bookings))
+    type_ids = list({b.meeting_type_id for b in bookings})
     types = await meeting_type_repo.find_by_ids(type_ids)
     type_map = {t.id: t for t in types}
 

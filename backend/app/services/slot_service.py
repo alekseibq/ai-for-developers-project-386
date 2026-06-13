@@ -1,6 +1,6 @@
-from datetime import datetime, date, timedelta, time
+from datetime import date, datetime, time, timedelta
 
-from app.domain.objects import SlotObj, MeetingTypeObj
+from app.domain.objects import MeetingTypeObj, SlotObj
 from app.repositories.booking_repository import BookingRepository
 
 
@@ -13,7 +13,7 @@ class SlotService:
         day: date,
         meeting_type: MeetingTypeObj,
     ) -> list[SlotObj]:
-        if day.weekday() >= 5:
+        if day.weekday() >= 5:  # noqa: PLR2004
             return []
 
         day_start = datetime.combine(day, time.min)

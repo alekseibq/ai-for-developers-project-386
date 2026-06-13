@@ -1,13 +1,12 @@
 from datetime import datetime
-
-from bson import ObjectId
+from typing import Any
 
 from app.domain.objects import BookingObj
 from app.infrastructure.database import Database
 
 
 class BookingRepository:
-    def __init__(self):
+    def __init__(self) -> None:
         self._collection = Database.get_db()["bookings"]
 
     async def create(
@@ -17,7 +16,7 @@ class BookingRepository:
         start_time: datetime,
         end_time: datetime,
     ) -> BookingObj:
-        doc = {
+        doc: dict[str, Any] = {
             "meeting_type_id": meeting_type_id,
             "guest_name": guest_name,
             "start_time": start_time,
@@ -70,7 +69,7 @@ class BookingRepository:
             result.append(self._doc_to_obj(doc))
         return result
 
-    def _doc_to_obj(self, doc: dict) -> BookingObj:
+    def _doc_to_obj(self, doc: dict[str, Any]) -> BookingObj:
         return BookingObj(
             id=str(doc["_id"]),
             meeting_type_id=doc["meeting_type_id"],

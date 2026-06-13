@@ -1,12 +1,11 @@
-from unittest.mock import AsyncMock
 from datetime import date, datetime, timedelta
+from unittest.mock import AsyncMock
 
 import pytest
 
-from app.domain.objects import MeetingTypeObj, SlotObj, SlotDateRangeObj
-from app.domain.result import Success, Failure
+from app.domain.objects import MeetingTypeObj, SlotDateRangeObj, SlotObj
+from app.domain.result import Failure, Success
 from app.usecases.find_slots_use_case import FindSlotsUseCase
-
 
 TODAY = date(2026, 6, 15)
 
@@ -14,10 +13,12 @@ TODAY = date(2026, 6, 15)
 @pytest.fixture
 def mock_slot_service() -> AsyncMock:
     service = AsyncMock()
-    service.find_available_slots = AsyncMock(return_value=[
-        SlotObj(start_time=datetime(2026, 6, 15, 9, 0), end_time=datetime(2026, 6, 15, 9, 30)),
-        SlotObj(start_time=datetime(2026, 6, 15, 9, 30), end_time=datetime(2026, 6, 15, 10, 0)),
-    ])
+    service.find_available_slots = AsyncMock(
+        return_value=[
+            SlotObj(start_time=datetime(2026, 6, 15, 9, 0), end_time=datetime(2026, 6, 15, 9, 30)),
+            SlotObj(start_time=datetime(2026, 6, 15, 9, 30), end_time=datetime(2026, 6, 15, 10, 0)),
+        ]
+    )
     return service
 
 
@@ -34,12 +35,14 @@ def mock_propose_dates() -> AsyncMock:
 @pytest.fixture
 def mock_meeting_type_repo() -> AsyncMock:
     repo = AsyncMock()
-    repo.find_by_id = AsyncMock(return_value=MeetingTypeObj(
-        id="mt1",
-        name="Consultation",
-        description="30-min consultation",
-        duration_minutes=30,
-    ))
+    repo.find_by_id = AsyncMock(
+        return_value=MeetingTypeObj(
+            id="mt1",
+            name="Consultation",
+            description="30-min consultation",
+            duration_minutes=30,
+        )
+    )
     return repo
 
 
@@ -120,11 +123,15 @@ class TestFindSlots:
         mock_meeting_type_repo: AsyncMock,
     ):
         expected_meeting_type = MeetingTypeObj(
-            id="mt1", name="Consultation", description="30-min consultation", duration_minutes=30,
+            id="mt1",
+            name="Consultation",
+            description="30-min consultation",
+            duration_minutes=30,
         )
 
         await use_case(date_str="2026-06-15", meeting_type_id="mt1")
 
         mock_slot_service.find_available_slots.assert_called_once_with(
-            date(2026, 6, 15), expected_meeting_type,
+            date(2026, 6, 15),
+            expected_meeting_type,
         )
