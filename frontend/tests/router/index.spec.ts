@@ -23,6 +23,11 @@ const routes = [
         name: "create-meeting-type",
         component: { template: "<div>CreateMeetingTypePage</div>" },
       },
+      {
+        path: "bookings",
+        name: "bookings",
+        component: { template: "<div>BookingsPage</div>" },
+      },
     ],
   },
 ];
@@ -57,5 +62,10 @@ describe("router", () => {
   it("/admin/meeting_types/new resolves to create-meeting-type route", () => {
     const route = router.resolve("/admin/meeting_types/new");
     expect(route.name).toBe("create-meeting-type");
+  });
+
+  it("/admin/bookings resolves to bookings route", () => {
+    const route = router.resolve("/admin/bookings");
+    expect(route.name).toBe("bookings");
   });
 });

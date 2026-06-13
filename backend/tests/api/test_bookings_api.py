@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from unittest.mock import AsyncMock
 
 from app.domain.result import Failure
@@ -12,7 +12,7 @@ from app.repositories.booking_repository import BookingRepository
 from app.repositories.meeting_type_repository import MeetingTypeRepository
 from app.usecases.create_booking_use_case import CreateBookingUseCase
 
-TODAY = datetime.utcnow()
+TODAY = datetime.now(UTC)
 
 
 class TestCreateBooking:
@@ -221,7 +221,7 @@ class TestListBookings:
 
     async def test_skip_booking_without_meeting_type(self, test_client):
         repo = BookingRepository()
-        future = datetime.utcnow() + timedelta(days=1, hours=10)
+        future = datetime.now(UTC) + timedelta(days=1, hours=10)
         await repo.create(
             meeting_type_id="000000000000000000000000",
             guest_name="Orphan Booking",

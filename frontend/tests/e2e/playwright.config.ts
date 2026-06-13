@@ -10,8 +10,14 @@ export default defineConfig({
     ? [["github"], ["list"], ["html", { outputFolder: "playwright-report" }]]
     : "list",
   use: {
-    baseURL: process.env.BASE_URL || "http://localhost",
+    baseURL: process.env.BASE_URL || "http://localhost:5173",
     trace: "on-first-retry",
+  },
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost:5173",
+    reuseExistingServer: !process.env.CI,
+    cwd: "../..",
   },
   projects: [
     {

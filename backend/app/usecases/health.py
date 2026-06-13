@@ -17,7 +17,7 @@ class HealthUseCase:
             database = await self._repo.check_database()
             obj = HealthObj(
                 status="ok" if database == "connected" else "degraded",
-                version=os.getenv("APP_VERSION", "0.1.1"),
+                version=os.getenv("APP_VERSION", "0.1.0"),
                 database=database,
                 uptime=time.time() - _start_time,
             )

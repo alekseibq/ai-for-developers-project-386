@@ -1,9 +1,23 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Health indicator", () => {
-  test("shows green dot and status text when backend is healthy", async ({
-    page,
-  }) => {
+  test("shows green dot and status text when backend is healthy", async ({ page }) => {
+    await page.route("**/api/v1/health", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          type: "success",
+          data: {
+            status: "ok",
+            version: "0.1.0",
+            database: "connected",
+            uptime: 42,
+          },
+        }),
+      });
+    });
+
     await page.goto("/");
 
     await expect(page.locator(".bg-green-500")).toBeVisible({
