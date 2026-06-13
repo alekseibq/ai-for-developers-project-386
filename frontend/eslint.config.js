@@ -13,7 +13,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser,
-        project: "./tsconfig.json",
+        project: ["./tsconfig.json", "./tsconfig.test.json"],
         extraFileExtensions: [".vue"],
       },
     },

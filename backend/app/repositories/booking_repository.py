@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from app.domain.objects import BookingObj
@@ -21,7 +21,7 @@ class BookingRepository:
             "guest_name": guest_name,
             "start_time": start_time,
             "end_time": end_time,
-            "created_at": datetime.utcnow(),
+            "created_at": datetime.now(UTC),
         }
         result = await self._collection.insert_one(doc)
         return BookingObj(
@@ -60,7 +60,7 @@ class BookingRepository:
         return result
 
     async def find_all_upcoming(self) -> list[BookingObj]:
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         cursor = self._collection.find(
             {"start_time": {"$gt": now}},
         ).sort("start_time", 1)

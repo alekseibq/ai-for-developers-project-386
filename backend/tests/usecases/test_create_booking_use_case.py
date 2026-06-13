@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from unittest.mock import AsyncMock
 
 import pytest
@@ -118,7 +118,7 @@ class TestCreateBooking:
         assert result.code == "OUTSIDE_WORK_HOURS"
 
     async def test_date_before_today_fails(self, use_case: CreateBookingUseCase):
-        yesterday = datetime.utcnow() - timedelta(days=1)
+        yesterday = datetime.now(UTC) - timedelta(days=1)
 
         result = await use_case(
             meeting_type_id="mt1",

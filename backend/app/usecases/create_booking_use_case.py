@@ -1,4 +1,4 @@
-from datetime import datetime, time, timedelta
+from datetime import UTC, datetime, time, timedelta
 
 from app.domain.objects import BookingObj
 from app.domain.result import Failure, Success
@@ -31,15 +31,16 @@ class CreateBookingUseCase:
         duration = timedelta(minutes=meeting_type.duration_minutes)
         end_time = start_time + duration
 
-        work_start = datetime.combine(start_time.date(), time(9, 0))
-        work_end = datetime.combine(start_time.date(), time(18, 0))
-        if start_time < work_start or end_time > work_end:
-            return Failure(error="Slot is outside working hours", code="OUTSIDE_WORK_HOURS")
-
-        today = datetime.utcnow().date()
+        today = datetime.now(UTC).date()
         request_date = start_time.date()
         if request_date < today or request_date > today + timedelta(days=13):
             return Failure(error="Date is outside booking window", code="OUTSIDE_BOOKING_WINDOW")
+
+        tz = start_time.tzinfo
+        work_start = datetime.combine(start_time.date(), time(9, 0), tzinfo=tz)
+        work_end = datetime.combine(start_time.date(), time(18, 0), tzinfo=tz)
+        if start_time < work_start or end_time > work_end:
+            return Failure(error="Slot is outside working hours", code="OUTSIDE_WORK_HOURS")
 
         overlapping = await self._booking_repo.find_overlapping(start_time, end_time)
         if overlapping:

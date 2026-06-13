@@ -5,13 +5,13 @@ test.describe("Guest booking flow", () => {
     {
       id: "mt-1",
       name: "Consultation",
-      description: "30-minute consultation",
+      description: "30-minute one-on-one",
       duration_minutes: 30,
     },
     {
       id: "mt-2",
       name: "Workshop",
-      description: "60-minute workshop",
+      description: "60-minute group session",
       duration_minutes: 60,
     },
   ];
@@ -71,7 +71,7 @@ test.describe("Guest booking flow", () => {
     await page.waitForURL("**/booking/mt-1");
 
     // Step 3: See meeting type details and calendar
-    await expect(page.locator("text=30 min meeting")).toBeVisible();
+    await expect(page.locator("text=30-minute one-on-one")).toBeVisible();
     await expect(page.locator("text=Июнь 2026")).toBeVisible();
 
     // Step 4: Click on an available date (June 15 = Monday)
