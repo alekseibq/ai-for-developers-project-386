@@ -7,22 +7,20 @@ const store = useMeetingTypesStore();
 const router = useRouter();
 
 onMounted(() => {
-  store.fetchMeetingTypes();
+  void store.fetchMeetingTypes();
 });
 </script>
 
 <template>
-  <div class="max-w-2xl mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-2">Выберите тип события</h2>
-    <p class="text-sm text-gray-500 mb-6">
-      Выберите подходящий тип встречи, чтобы продолжить
-    </p>
+  <div class="mx-auto max-w-2xl px-4 py-8">
+    <h2 class="mb-2 text-2xl font-bold">Выберите тип события</h2>
+    <p class="mb-6 text-sm text-gray-500">Выберите подходящий тип встречи, чтобы продолжить</p>
 
     <div v-if="store.loading" class="text-gray-500">Загрузка...</div>
 
     <div
       v-else-if="store.error"
-      class="text-red-600 bg-red-50 border border-red-200 rounded-md p-3 text-sm"
+      class="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600"
     >
       {{ store.error }}
     </div>
@@ -35,23 +33,23 @@ onMounted(() => {
       <div
         v-for="mt in store.meetingTypes"
         :key="mt.id"
-        class="border border-gray-200 rounded-lg p-5 bg-white cursor-pointer hover:border-indigo-300 hover:shadow-sm transition-all"
-        @click="router.push(`/booking/${mt.id}`)"
+        class="cursor-pointer rounded-lg border border-gray-200 bg-white p-5 transition-all hover:border-indigo-300 hover:shadow-sm"
         role="button"
         :tabindex="0"
+        @click="router.push(`/booking/${mt.id}`)"
         @keydown.enter="router.push(`/booking/${mt.id}`)"
       >
         <div class="flex items-start justify-between">
           <div>
             <h3 class="text-lg font-semibold">{{ mt.name }}</h3>
-            <p class="text-sm text-gray-600 mt-1">{{ mt.description }}</p>
+            <p class="mt-1 text-sm text-gray-600">{{ mt.description }}</p>
           </div>
           <span
-            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 whitespace-nowrap ml-4"
+            class="ml-4 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-3.5 h-3.5"
+              class="size-3.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

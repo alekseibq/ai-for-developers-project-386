@@ -1,15 +1,15 @@
 from fastapi import Depends
 
+from app.repositories.booking_repository import BookingRepository
 from app.repositories.health import HealthRepository
 from app.repositories.meeting_type_repository import MeetingTypeRepository
-from app.repositories.booking_repository import BookingRepository
-from app.services.slot_service import SlotService
 from app.services.propose_slot_dates_service import ProposeSlotDatesService
-from app.usecases.health import HealthUseCase
-from app.usecases.list_all_meeting_type_use_case import ListAllMeetingTypeUseCase
+from app.services.slot_service import SlotService
+from app.usecases.create_booking_use_case import CreateBookingUseCase
 from app.usecases.create_meeting_type_use_case import CreateMeetingTypeUseCase
 from app.usecases.find_slots_use_case import FindSlotsUseCase
-from app.usecases.create_booking_use_case import CreateBookingUseCase
+from app.usecases.health import HealthUseCase
+from app.usecases.list_all_meeting_type_use_case import ListAllMeetingTypeUseCase
 from app.usecases.list_upcoming_bookings_use_case import ListUpcomingBookingsUseCase
 
 

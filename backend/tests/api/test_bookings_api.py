@@ -1,8 +1,6 @@
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock
 
-import pytest
-
 from app.domain.result import Failure
 from app.infrastructure.di import (
     create_booking_usecase,
@@ -14,28 +12,33 @@ from app.repositories.booking_repository import BookingRepository
 from app.repositories.meeting_type_repository import MeetingTypeRepository
 from app.usecases.create_booking_use_case import CreateBookingUseCase
 
-
 TODAY = datetime.utcnow()
 
 
 class TestCreateBooking:
     async def _create_meeting_type(self, test_client, name="Consultation", duration=30):
-        resp = await test_client.post("/api/v1/meeting-types", json={
-            "name": name,
-            "description": "test",
-            "duration_minutes": duration,
-        })
+        resp = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": name,
+                "description": "test",
+                "duration_minutes": duration,
+            },
+        )
         return resp.json()["data"]["id"]
 
     async def test_success(self, test_client):
         mt_id = await self._create_meeting_type(test_client)
         start = _next_weekday_10am(TODAY)
 
-        response = await test_client.post("/api/v1/bookings", json={
-            "meeting_type_id": mt_id,
-            "guest_name": "John Doe",
-            "start_time": start.isoformat(),
-        })
+        response = await test_client.post(
+            "/api/v1/bookings",
+            json={
+                "meeting_type_id": mt_id,
+                "guest_name": "John Doe",
+                "start_time": start.isoformat(),
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()
@@ -48,11 +51,14 @@ class TestCreateBooking:
         mt_id = await self._create_meeting_type(test_client)
         start = _next_weekday_10am(TODAY)
 
-        response = await test_client.post("/api/v1/bookings", json={
-            "meeting_type_id": mt_id,
-            "guest_name": "",
-            "start_time": start.isoformat(),
-        })
+        response = await test_client.post(
+            "/api/v1/bookings",
+            json={
+                "meeting_type_id": mt_id,
+                "guest_name": "",
+                "start_time": start.isoformat(),
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()
@@ -62,11 +68,14 @@ class TestCreateBooking:
     async def test_nonexistent_meeting_type_fails(self, test_client):
         start = _next_weekday_10am(TODAY)
 
-        response = await test_client.post("/api/v1/bookings", json={
-            "meeting_type_id": "000000000000000000000000",
-            "guest_name": "John Doe",
-            "start_time": start.isoformat(),
-        })
+        response = await test_client.post(
+            "/api/v1/bookings",
+            json={
+                "meeting_type_id": "000000000000000000000000",
+                "guest_name": "John Doe",
+                "start_time": start.isoformat(),
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()
@@ -77,11 +86,14 @@ class TestCreateBooking:
         mt_id = await self._create_meeting_type(test_client)
         start = _next_weekday_8am(TODAY)
 
-        response = await test_client.post("/api/v1/bookings", json={
-            "meeting_type_id": mt_id,
-            "guest_name": "John Doe",
-            "start_time": start.isoformat(),
-        })
+        response = await test_client.post(
+            "/api/v1/bookings",
+            json={
+                "meeting_type_id": mt_id,
+                "guest_name": "John Doe",
+                "start_time": start.isoformat(),
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()
@@ -106,11 +118,14 @@ class TestCreateBooking:
         app.dependency_overrides[meeting_type_repository] = lambda: mock_mt_repo
 
         try:
-            response = await test_client.post("/api/v1/bookings", json={
-                "meeting_type_id": mt_id,
-                "guest_name": "John Doe",
-                "start_time": start.isoformat(),
-            })
+            response = await test_client.post(
+                "/api/v1/bookings",
+                json={
+                    "meeting_type_id": mt_id,
+                    "guest_name": "John Doe",
+                    "start_time": start.isoformat(),
+                },
+            )
 
             assert response.status_code == 200
             body = response.json()
@@ -123,17 +138,23 @@ class TestCreateBooking:
         mt_id = await self._create_meeting_type(test_client)
         start = _next_weekday_10am(TODAY)
 
-        await test_client.post("/api/v1/bookings", json={
-            "meeting_type_id": mt_id,
-            "guest_name": "First",
-            "start_time": start.isoformat(),
-        })
+        await test_client.post(
+            "/api/v1/bookings",
+            json={
+                "meeting_type_id": mt_id,
+                "guest_name": "First",
+                "start_time": start.isoformat(),
+            },
+        )
 
-        response = await test_client.post("/api/v1/bookings", json={
-            "meeting_type_id": mt_id,
-            "guest_name": "Second",
-            "start_time": start.isoformat(),
-        })
+        response = await test_client.post(
+            "/api/v1/bookings",
+            json={
+                "meeting_type_id": mt_id,
+                "guest_name": "Second",
+                "start_time": start.isoformat(),
+            },
+        )
 
         assert response.status_code == 200
         body = response.json()
@@ -143,11 +164,14 @@ class TestCreateBooking:
 
 class TestListBookings:
     async def _create_meeting_type(self, test_client, name="Consultation", duration=30):
-        resp = await test_client.post("/api/v1/meeting-types", json={
-            "name": name,
-            "description": "test",
-            "duration_minutes": duration,
-        })
+        resp = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": name,
+                "description": "test",
+                "duration_minutes": duration,
+            },
+        )
         return resp.json()["data"]["id"]
 
     async def test_empty_list(self, test_client):
@@ -162,11 +186,14 @@ class TestListBookings:
         mt_id = await self._create_meeting_type(test_client)
         start = _next_weekday_10am(TODAY)
 
-        await test_client.post("/api/v1/bookings", json={
-            "meeting_type_id": mt_id,
-            "guest_name": "John Doe",
-            "start_time": start.isoformat(),
-        })
+        await test_client.post(
+            "/api/v1/bookings",
+            json={
+                "meeting_type_id": mt_id,
+                "guest_name": "John Doe",
+                "start_time": start.isoformat(),
+            },
+        )
 
         response = await test_client.get("/api/v1/bookings")
 

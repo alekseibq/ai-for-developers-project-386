@@ -1,10 +1,11 @@
 from unittest.mock import AsyncMock
 
 import pytest
-from app.domain.result import Success, Failure
+
 from app.domain.objects import HealthObj
-from app.usecases.health import HealthUseCase
+from app.domain.result import Failure, Success
 from app.repositories.health import HealthRepository
+from app.usecases.health import HealthUseCase
 
 
 @pytest.mark.asyncio

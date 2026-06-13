@@ -1,9 +1,9 @@
-from datetime import datetime, date, time, timedelta
+from datetime import date, datetime, timedelta
 from unittest.mock import AsyncMock
 
 import pytest
 
-from app.domain.objects import MeetingTypeObj, SlotObj
+from app.domain.objects import MeetingTypeObj
 from app.services.slot_service import SlotService
 
 
@@ -159,7 +159,8 @@ class TestFindAvailableSlots:
         expected_day_start = datetime(2026, 6, 15, 0, 0)
         expected_day_end = datetime(2026, 6, 15, 23, 59, 59, 999999)
         mock_booking_repo.find_occupied_intervals.assert_called_once_with(
-            expected_day_start, expected_day_end,
+            expected_day_start,
+            expected_day_end,
         )
 
     async def test_partial_overlap_excludes_slot(

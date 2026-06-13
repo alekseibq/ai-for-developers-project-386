@@ -3,19 +3,21 @@ from unittest.mock import AsyncMock
 import pytest
 
 from app.domain.objects import MeetingTypeObj
-from app.domain.result import Success, Failure
+from app.domain.result import Failure, Success
 from app.usecases.create_meeting_type_use_case import CreateMeetingTypeUseCase
 
 
 @pytest.fixture
 def mock_repo() -> AsyncMock:
     repo = AsyncMock()
-    repo.create = AsyncMock(return_value=MeetingTypeObj(
-        id="new_id",
-        name="Consultation",
-        description="A 30-min consultation",
-        duration_minutes=30,
-    ))
+    repo.create = AsyncMock(
+        return_value=MeetingTypeObj(
+            id="new_id",
+            name="Consultation",
+            description="A 30-min consultation",
+            duration_minutes=30,
+        )
+    )
     return repo
 
 

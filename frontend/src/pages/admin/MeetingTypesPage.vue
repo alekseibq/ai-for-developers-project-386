@@ -7,16 +7,16 @@ const store = useMeetingTypesStore();
 const router = useRouter();
 
 onMounted(() => {
-  store.fetchMeetingTypes();
+  void store.fetchMeetingTypes();
 });
 </script>
 
 <template>
   <div>
-    <div class="flex items-center justify-between mb-6">
+    <div class="mb-6 flex items-center justify-between">
       <h2 class="text-2xl font-bold">Типы событий</h2>
       <button
-        class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors"
+        class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
         @click="router.push('/admin/meeting_types/new')"
       >
         Создать новый Тип события
@@ -27,7 +27,7 @@ onMounted(() => {
 
     <div
       v-else-if="store.error"
-      class="text-red-600 bg-red-50 border border-red-200 rounded-md p-3 text-sm"
+      class="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600"
     >
       {{ store.error }}
     </div>
@@ -40,20 +40,20 @@ onMounted(() => {
       <div
         v-for="mt in store.meetingTypes"
         :key="mt.id"
-        class="border border-gray-200 rounded-lg p-4 bg-white"
+        class="rounded-lg border border-gray-200 bg-white p-4"
       >
         <div class="flex items-start justify-between">
           <div>
             <h3 class="text-lg font-semibold">{{ mt.name }}</h3>
-            <p class="text-xs text-gray-400 font-mono mt-0.5">{{ mt.id }}</p>
-            <p class="text-sm text-gray-600 mt-1">{{ mt.description }}</p>
+            <p class="mt-0.5 font-mono text-xs text-gray-400">{{ mt.id }}</p>
+            <p class="mt-1 text-sm text-gray-600">{{ mt.description }}</p>
           </div>
           <span
-            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 whitespace-nowrap"
+            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-3.5 h-3.5"
+              class="size-3.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

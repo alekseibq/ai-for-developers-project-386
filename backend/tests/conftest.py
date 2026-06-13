@@ -1,10 +1,11 @@
 from collections.abc import AsyncGenerator
-import pytest_asyncio
-from testcontainers.mongodb import MongoDbContainer
-from httpx import AsyncClient, ASGITransport
 
-from app.main import app
+import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
+from testcontainers.mongodb import MongoDbContainer
+
 from app.infrastructure.database import Database
+from app.main import app
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -21,6 +22,7 @@ async def mongodb_container():
 async def test_client(mongodb_container) -> AsyncGenerator[AsyncClient, None]:
     uri = mongodb_container.get_connection_url()
     import os
+
     os.environ["MONGO_URI"] = uri
 
     await Database.connect()

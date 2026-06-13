@@ -3,8 +3,8 @@ import os
 import pytest_asyncio
 
 from app.infrastructure.database import Database
-from app.repositories.meeting_type_repository import MeetingTypeRepository
 from app.repositories.booking_repository import BookingRepository
+from app.repositories.meeting_type_repository import MeetingTypeRepository
 
 
 @pytest_asyncio.fixture

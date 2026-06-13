@@ -1,10 +1,11 @@
 import os
+
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 
 class Database:
-    _client: AsyncIOMotorClient | None = None
-    _db: AsyncIOMotorDatabase | None = None
+    _client: AsyncIOMotorClient | None = None  # type: ignore[type-arg]
+    _db: AsyncIOMotorDatabase | None = None  # type: ignore[type-arg]
 
     @classmethod
     async def connect(cls) -> None:
@@ -21,7 +22,7 @@ class Database:
             cls._db = None
 
     @classmethod
-    def get_db(cls) -> AsyncIOMotorDatabase:
+    def get_db(cls) -> AsyncIOMotorDatabase:  # type: ignore[type-arg]
         if cls._db is None:
             raise RuntimeError("Database not connected")
         return cls._db

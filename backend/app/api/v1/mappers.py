@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from app.domain.objects import MeetingTypeObj, SlotObj, BookingObj
-from app.api.v1.dto import MeetingTypeDto, SlotDto, BookingRawDto, BookingRichDto
+from app.api.v1.dto import BookingRawDto, BookingRichDto, MeetingTypeDto, SlotDto
+from app.domain.objects import BookingObj, MeetingTypeObj, SlotObj
 
 
 def meeting_type_obj_to_dto(obj: MeetingTypeObj) -> MeetingTypeDto:

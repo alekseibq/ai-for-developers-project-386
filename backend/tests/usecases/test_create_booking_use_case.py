@@ -1,12 +1,11 @@
-from unittest.mock import AsyncMock
 from datetime import datetime, timedelta
+from unittest.mock import AsyncMock
 
 import pytest
 
-from app.domain.objects import MeetingTypeObj, BookingObj
-from app.domain.result import Success, Failure
+from app.domain.objects import BookingObj, MeetingTypeObj
+from app.domain.result import Failure, Success
 from app.usecases.create_booking_use_case import CreateBookingUseCase
-
 
 TODAY = datetime(2026, 6, 15)
 
@@ -15,25 +14,29 @@ TODAY = datetime(2026, 6, 15)
 def mock_booking_repo() -> AsyncMock:
     repo = AsyncMock()
     repo.find_overlapping = AsyncMock(return_value=[])
-    repo.create = AsyncMock(return_value=BookingObj(
-        id="booking1",
-        meeting_type_id="mt1",
-        guest_name="John Doe",
-        start_time=datetime(2026, 6, 15, 10, 0),
-        created_at=TODAY,
-    ))
+    repo.create = AsyncMock(
+        return_value=BookingObj(
+            id="booking1",
+            meeting_type_id="mt1",
+            guest_name="John Doe",
+            start_time=datetime(2026, 6, 15, 10, 0),
+            created_at=TODAY,
+        )
+    )
     return repo
 
 
 @pytest.fixture
 def mock_meeting_type_repo() -> AsyncMock:
     repo = AsyncMock()
-    repo.find_by_id = AsyncMock(return_value=MeetingTypeObj(
-        id="mt1",
-        name="Consultation",
-        description="30-min consultation",
-        duration_minutes=30,
-    ))
+    repo.find_by_id = AsyncMock(
+        return_value=MeetingTypeObj(
+            id="mt1",
+            name="Consultation",
+            description="30-min consultation",
+            duration_minutes=30,
+        )
+    )
     return repo
 
 
@@ -141,15 +144,17 @@ class TestCreateBooking:
         use_case: CreateBookingUseCase,
         mock_booking_repo: AsyncMock,
     ):
-        mock_booking_repo.find_overlapping = AsyncMock(return_value=[
-            BookingObj(
-                id="existing",
-                meeting_type_id="mt1",
-                guest_name="Jane",
-                start_time=datetime(2026, 6, 15, 10, 0),
-                created_at=TODAY,
-            ),
-        ])
+        mock_booking_repo.find_overlapping = AsyncMock(
+            return_value=[
+                BookingObj(
+                    id="existing",
+                    meeting_type_id="mt1",
+                    guest_name="Jane",
+                    start_time=datetime(2026, 6, 15, 10, 0),
+                    created_at=TODAY,
+                ),
+            ]
+        )
 
         result = await use_case(
             meeting_type_id="mt1",

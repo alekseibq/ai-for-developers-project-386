@@ -1,3 +1,5 @@
+from typing import Any
+
 from bson import ObjectId
 
 from app.domain.objects import MeetingTypeObj
@@ -5,7 +7,7 @@ from app.infrastructure.database import Database
 
 
 class MeetingTypeRepository:
-    def __init__(self):
+    def __init__(self) -> None:
         self._collection = Database.get_db()["meeting_types"]
 
     async def find_all(self) -> list[MeetingTypeObj]:
@@ -48,7 +50,7 @@ class MeetingTypeRepository:
             duration_minutes=duration_minutes,
         )
 
-    def _doc_to_obj(self, doc: dict) -> MeetingTypeObj:
+    def _doc_to_obj(self, doc: dict[str, Any]) -> MeetingTypeObj:
         return MeetingTypeObj(
             id=str(doc["_id"]),
             name=doc["name"],

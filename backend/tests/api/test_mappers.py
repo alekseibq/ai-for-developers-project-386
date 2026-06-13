@@ -1,13 +1,13 @@
 from datetime import datetime
 
-from app.domain.objects import MeetingTypeObj, SlotObj, BookingObj
-from app.api.v1.dto import MeetingTypeDto, SlotDto, BookingRichDto
+from app.api.v1.dto import BookingRichDto, MeetingTypeDto, SlotDto
 from app.api.v1.mappers import (
-    meeting_type_obj_to_dto,
-    slot_obj_to_dto,
     booking_obj_to_raw_dto,
     booking_obj_to_rich_dto,
+    meeting_type_obj_to_dto,
+    slot_obj_to_dto,
 )
+from app.domain.objects import BookingObj, MeetingTypeObj, SlotObj
 
 
 def test_meeting_type_obj_to_dto():

@@ -1,18 +1,18 @@
 from datetime import date, timedelta
 
-import pytest
-
-
 TODAY = date.today()
 
 
 class TestGetSlots:
     async def test_success(self, test_client):
-        mt_resp = await test_client.post("/api/v1/meeting-types", json={
-            "name": "Consultation",
-            "description": "30 min",
-            "duration_minutes": 30,
-        })
+        mt_resp = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "Consultation",
+                "description": "30 min",
+                "duration_minutes": 30,
+            },
+        )
         mt_id = mt_resp.json()["data"]["id"]
 
         monday = _next_weekday(TODAY)
@@ -27,11 +27,14 @@ class TestGetSlots:
         assert body["data"][0]["start_time"] is not None
 
     async def test_invalid_date_format_fails(self, test_client):
-        mt_resp = await test_client.post("/api/v1/meeting-types", json={
-            "name": "Consultation",
-            "description": "30 min",
-            "duration_minutes": 30,
-        })
+        mt_resp = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "Consultation",
+                "description": "30 min",
+                "duration_minutes": 30,
+            },
+        )
         mt_id = mt_resp.json()["data"]["id"]
 
         response = await test_client.get(
@@ -44,11 +47,14 @@ class TestGetSlots:
         assert body["code"] == "INVALID_DATE"
 
     async def test_weekend_returns_empty(self, test_client):
-        mt_resp = await test_client.post("/api/v1/meeting-types", json={
-            "name": "Consultation",
-            "description": "30 min",
-            "duration_minutes": 30,
-        })
+        mt_resp = await test_client.post(
+            "/api/v1/meeting-types",
+            json={
+                "name": "Consultation",
+                "description": "30 min",
+                "duration_minutes": 30,
+            },
+        )
         mt_id = mt_resp.json()["data"]["id"]
 
         saturday = _next_saturday(TODAY)

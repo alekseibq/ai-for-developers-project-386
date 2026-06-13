@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta, time
+from datetime import datetime, time, timedelta
 
-from app.domain.result import Success, Failure
+from app.domain.objects import BookingObj
+from app.domain.result import Failure, Success
 from app.repositories.booking_repository import BookingRepository
 from app.repositories.meeting_type_repository import MeetingTypeRepository
 
@@ -19,7 +20,7 @@ class CreateBookingUseCase:
         meeting_type_id: str,
         guest_name: str,
         start_time: datetime,
-    ):
+    ) -> Success[BookingObj] | Failure:
         if not guest_name or not guest_name.strip():
             return Failure(error="Guest name is required", code="INVALID_GUEST_NAME")
 
