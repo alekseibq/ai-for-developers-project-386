@@ -5,10 +5,8 @@ services:
     plan: free
     port: 10000
     dockerfilePath: ./docker/backend.Dockerfile
-    healthCheckPath: /api/v1/health
+    healthCheckPath: /healthz
     envVars:
-      - key: MONGO_URI
-        value: mongodb+srv://alekseibq_db_user:ejorIQ9AxMhq1LiF@cluster0.l1ympp9.mongodb.net/
       - key: MONGO_DB_NAME
         value: calcom
       - key: APP_VERSION
