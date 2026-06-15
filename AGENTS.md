@@ -181,6 +181,39 @@ onMounted(() => { store.fetchMeetingTypes() })
 
 Also: `npm run test:unit` (FE vitest), `npm run lint` (FE vue-tsc only).
 
+## Conventional Commits (Required)
+
+Every commit **must** follow the [Conventional Commits](https://www.conventionalcommits.org/) format.
+Both hooks (local) and CI (PR) enforce it via commitlint.
+
+```
+type(scope): description
+
+[optional body]
+
+[optional footer]
+```
+
+**Allowed types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+
+**Examples:**
+```
+feat(api): add create meeting type endpoint
+fix(frontend): handle empty slot list
+docs: update API contract in AGENTS.md
+refactor(backend): extract slot overlap logic
+```
+
+- `scope` is optional but encouraged (e.g. `backend`, `frontend`, `typespec`, `infra`).
+- `BREAKING CHANGE:` in footer (or `!` after type/scope) marks a breaking change.
+- Reverts: `revert: type: message` (commitlint infers type from the reverted commit).
+
+## Branching & PR Workflow
+
+- **Direct pushes to `main` are forbidden.** All changes must go through a feature branch and a Pull Request.
+- Branch from `main`, push your feature branch, open a PR, get it reviewed and merged.
+- PR title should also follow Conventional Commits (used for squash-merge commit message).
+
 ## Conventions Summary
 1. Result Pattern on every API response.
 2. Absolute imports only (Python); `@/` alias (TS).
@@ -190,3 +223,4 @@ Also: `npm run test:unit` (FE vitest), `npm run lint` (FE vue-tsc only).
 6. Test files mirror source (one-to-one).
 7. TypeSpec is source of truth for API contracts; generated OpenAPI is checked in.
 8. Ruff line-length=100, no trailing commas convention observed.
+9. **Conventional Commits** enforced locally (commit-msg hook) and in CI (PR).
