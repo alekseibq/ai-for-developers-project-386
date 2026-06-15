@@ -17,6 +17,7 @@ typespec/node_modules/
 
 # Environment
 .env
+opencode.json
 
 # TypeSpec
 typespec/dist/
