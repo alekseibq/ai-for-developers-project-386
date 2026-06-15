@@ -11,7 +11,7 @@ class Database:
     async def connect(cls) -> None:
         uri = os.getenv("MONGO_URI", "mongodb://mongo:27017/calcom")
         db_name = os.getenv("MONGO_DB_NAME", "calcom")
-        cls._client = AsyncIOMotorClient(uri)
+        cls._client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=5000)
         cls._db = cls._client[db_name]
 
     @classmethod
