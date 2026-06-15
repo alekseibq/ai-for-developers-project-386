@@ -4,20 +4,11 @@ services:
     runtime: docker
     dockerfilePath: ./docker/backend.Dockerfile
     healthCheckPath: /api/v1/health
+    port: 8000
     envVars:
       - key: MONGO_URI
         sync: false
       - key: MONGO_DB_NAME
         value: calcom
-
-  - type: static
-    name: hexlet-ai-for-devs-386-frontend
-    buildCommand: cd frontend && npm ci && npm run build
-    staticPublishPath: ./frontend/dist
-    envVars:
-      - key: VITE_API_BASE
-        value: https://hexlet-ai-for-devs-386-backend.onrender.com/api/v1
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+      - key: APP_VERSION
+        value: "0.1.0"
