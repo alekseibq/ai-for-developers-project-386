@@ -188,8 +188,8 @@ test.describe("Guest booking flow", () => {
 
     await page.goto("/");
 
-    // Click "Забронировать" in header
-    await page.locator("text=Забронировать").click();
+    // Click "Забронировать" in header (not the home page tile)
+    await page.locator("header a", { hasText: "Забронировать" }).click();
     await page.waitForURL("/booking");
 
     await expect(page.locator("text=Выберите тип события")).toBeVisible();
