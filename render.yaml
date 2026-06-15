@@ -10,7 +10,7 @@ services:
       - key: MONGO_DB_NAME
         value: calcom
       - key: APP_VERSION
-        value: "0.1.1"
+        value: "0.1.0"
 
   - type: static_site
     name: hexlet-ai-for-devs-386-frontend
