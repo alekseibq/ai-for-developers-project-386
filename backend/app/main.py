@@ -22,12 +22,12 @@ app = FastAPI(lifespan=lifespan)
 
 
 @app.api_route("/", methods=["GET", "HEAD"])
-async def root() -> dict:
+async def root() -> dict[str, str]:
     return {"status": "ok"}
 
 
 @app.get("/healthz")
-async def healthz() -> dict:
+async def healthz() -> dict[str, str]:
     return {"status": "ok"}
 
 
