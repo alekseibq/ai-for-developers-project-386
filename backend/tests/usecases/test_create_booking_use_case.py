@@ -7,7 +7,9 @@ from app.domain.objects import BookingObj, MeetingTypeObj
 from app.domain.result import Failure, Success
 from app.usecases.create_booking_use_case import CreateBookingUseCase
 
-TODAY = datetime(2026, 6, 15)
+_NOW = datetime.now(UTC)
+TODAY = _NOW.replace(hour=0, minute=0, second=0, microsecond=0)
+IN_WINDOW = TODAY + timedelta(days=1)
 
 
 @pytest.fixture
@@ -19,7 +21,7 @@ def mock_booking_repo() -> AsyncMock:
             id="booking1",
             meeting_type_id="mt1",
             guest_name="John Doe",
-            start_time=datetime(2026, 6, 15, 10, 0),
+            start_time=IN_WINDOW.replace(hour=10, minute=0),
             created_at=TODAY,
         )
     )
@@ -53,7 +55,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="mt1",
             guest_name="John Doe",
-            start_time=datetime(2026, 6, 15, 10, 0),
+            start_time=IN_WINDOW.replace(hour=10, minute=0),
         )
 
         assert isinstance(result, Success)
@@ -65,7 +67,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="mt1",
             guest_name="",
-            start_time=datetime(2026, 6, 15, 10, 0),
+            start_time=IN_WINDOW.replace(hour=10, minute=0),
         )
 
         assert isinstance(result, Failure)
@@ -75,7 +77,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="mt1",
             guest_name="   ",
-            start_time=datetime(2026, 6, 15, 10, 0),
+            start_time=IN_WINDOW.replace(hour=10, minute=0),
         )
 
         assert isinstance(result, Failure)
@@ -91,7 +93,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="nonexistent",
             guest_name="John Doe",
-            start_time=datetime(2026, 6, 15, 10, 0),
+            start_time=IN_WINDOW.replace(hour=10, minute=0),
         )
 
         assert isinstance(result, Failure)
@@ -101,7 +103,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="mt1",
             guest_name="John Doe",
-            start_time=datetime(2026, 6, 15, 8, 0),
+            start_time=IN_WINDOW.replace(hour=7, minute=0),
         )
 
         assert isinstance(result, Failure)
@@ -111,7 +113,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="mt1",
             guest_name="John Doe",
-            start_time=datetime(2026, 6, 15, 17, 45),
+            start_time=IN_WINDOW.replace(hour=17, minute=45),
         )
 
         assert isinstance(result, Failure)
@@ -133,7 +135,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="mt1",
             guest_name="John Doe",
-            start_time=datetime(2026, 6, 29, 10, 0),
+            start_time=(IN_WINDOW + timedelta(days=14)).replace(hour=10, minute=0),
         )
 
         assert isinstance(result, Failure)
@@ -150,7 +152,7 @@ class TestCreateBooking:
                     id="existing",
                     meeting_type_id="mt1",
                     guest_name="Jane",
-                    start_time=datetime(2026, 6, 15, 10, 0),
+                    start_time=IN_WINDOW.replace(hour=10, minute=0),
                     created_at=TODAY,
                 ),
             ]
@@ -159,7 +161,7 @@ class TestCreateBooking:
         result = await use_case(
             meeting_type_id="mt1",
             guest_name="John Doe",
-            start_time=datetime(2026, 6, 15, 10, 0),
+            start_time=IN_WINDOW.replace(hour=10, minute=0),
         )
 
         assert isinstance(result, Failure)
