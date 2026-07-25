@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Guest booking flow", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.clock.setFixedTime(new Date("2026-06-13T12:00:00"));
+  });
   const meetingTypes = [
     {
       id: "mt-1",
